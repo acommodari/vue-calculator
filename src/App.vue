@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+    <img src="./assets/logo.png" />
     <h1>Inspired by the Microsoft Standard Calculator</h1>
     <Calculator />
   </div>
@@ -27,11 +28,15 @@ body {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #eaeef2;
-  margin-top: 5rem;
+  margin-top: 4.25rem;
+}
+
+img {
+  max-width: 3rem;
 }
 
 h1 {
-  font-size: 3rem;
+  font-size: 2rem;
   text-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.3);
 }
 </style>
