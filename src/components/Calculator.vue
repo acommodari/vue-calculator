@@ -1,6 +1,8 @@
 <template>
   <div class="calculator">
-    <div class="display">{{ current || "0" }}</div>
+    <div class="display" :class="{ shrink: isShrink }">
+      {{ current || "0" }}
+    </div>
     <div class="btn operator" @click="clear">AC</div>
     <div class="btn operator" @click="sign">±</div>
     <div class="btn operator" @click="percent">%</div>
@@ -30,12 +32,16 @@ export default {
       previous: null,
       current: "",
       operator: null,
-      isOperatorClicked: false
+      isOperatorClicked: false,
+      isShrink: false
     };
   },
   methods: {
     clear() {
       this.current = "";
+      this.operator = null;
+      this.previous = null;
+      this.isShrink = false;
     },
     sign() {
       this.current = `${parseFloat(this.current) * -1}`;
@@ -47,12 +53,34 @@ export default {
       if (this.isOperatorClicked) {
         this.current = "";
         this.isOperatorClicked = false;
+        this.isShrink = false;
       }
-      this.current = `${this.current}${number}`;
+      if (this.current.length == 9) {
+        this.isShrink = true;
+      }
+      if (this.current.length < 13) {
+        this.current = `${this.current}${number}`;
+      }
     },
     dot() {
       if (!this.current.includes(".")) {
         this.append(".");
+      }
+    },
+    computeOp() {
+      let number = `${this.operator(
+        parseFloat(this.previous),
+        parseFloat(this.current)
+      )}`;
+      if (number.length > 13) {
+        number = `${parseFloat(number).toExponential(2)}`;
+      }
+      return number;
+    },
+    operatorSetup() {
+      if (this.operator) {
+        this.previous = this.computeOp();
+        this.current = this.previous;
       }
     },
     setPrevious() {
@@ -60,27 +88,30 @@ export default {
       this.isOperatorClicked = true;
     },
     divide() {
+      this.operatorSetup();
       this.operator = (a, b) => a / b;
       this.setPrevious();
     },
     multiply() {
+      this.operatorSetup();
       this.operator = (a, b) => a * b;
       this.setPrevious();
     },
     substract() {
+      this.operatorSetup();
       this.operator = (a, b) => a - b;
       this.setPrevious();
     },
     add() {
+      this.operatorSetup();
       this.operator = (a, b) => a + b;
       this.setPrevious();
     },
     equal() {
-      this.current = `${this.operator(
-        parseFloat(this.previous),
-        parseFloat(this.current)
-      )}`;
+      this.current = this.computeOp();
       this.previous = null;
+      this.operator = null;
+      this.isOperatorClicked = true;
     }
   }
 };
@@ -91,11 +122,14 @@ export default {
   display: grid;
   align-items: stretch;
   width: 16rem;
-  margin: 0 auto;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   grid-template-columns: repeat(4, 1fr);
   grid-auto-rows: 4rem;
   user-select: none;
-  box-shadow: 0 1rem 2rem 0 rgba(0, 0, 0, 0.3);
+  box-shadow: 0 1rem 2rem 0 rgba(0, 0, 0, 0.4);
 }
 
 .display {
@@ -118,12 +152,25 @@ export default {
   background-color: black;
   color: white;
   border: 1px solid #474747;
+  cursor: pointer;
+}
+
+.btn:hover {
+  background-color: #888888;
+}
+
+.btn:active {
+  background-color: #a0a0a0;
 }
 
 .zero {
   display: flex;
   grid-column: 1/3;
   align-items: center;
+}
+
+.shrink {
+  font-size: 2rem;
 }
 
 .operator {

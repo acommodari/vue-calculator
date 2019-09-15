@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+    <h1>Inspired by the Microsoft Standard Calculator</h1>
     <Calculator />
   </div>
 </template>
@@ -16,12 +17,21 @@ export default {
 </script>
 
 <style>
+body {
+  background-color: #43484d;
+}
+
 #app {
   font-family: "Avenir", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+  color: #eaeef2;
+  margin-top: 5rem;
+}
+
+h1 {
+  font-size: 3rem;
+  text-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.3);
 }
 </style>
