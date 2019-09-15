@@ -1,5 +1,11 @@
 # vue-calculator
 
+This project is deployed on Heroku: https://vue-calculator-app.herokuapp.com/
+
+Please try it out and enjoy!
+
+---
+
 ## Project setup
 ```
 npm install
